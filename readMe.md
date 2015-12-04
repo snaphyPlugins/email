@@ -39,7 +39,7 @@
         //First load this plugin file inside your plugin.
         var mail = helper.loadPlugin('pluginName');
         //Now call method emailModel.TemplateName(from, to, subject, {}, callback);   
-        mail.adminEmail.sendNotice("robinskumar73@gmail.com", "xyz@gmail.com", "Hey this is a subject", {'title': 'this is a test title'}, callback)
+        mail.adminEmail.sendNotice(" 'Rohit Basu' <rohitbasu2050@gmail.com>", "xyz@gmail.com", "Hey this is a subject", {'title': 'this is a test title'}, callback)
      ```
      
      
@@ -47,7 +47,7 @@
 2. emailModel.send({from, to, subject, message}, callback) to send any message
 3. emailModel.TemplateName(from, to, subject, {}, callback) to send any templated message.
 	 
-
+NOTE: USing gmail sometime gmail prevent login for less secure apps. You need to re-enable [Turn On for less secure Apps](https://www.google.com/settings/u/2/security/lesssecureapps)
 
 
 
