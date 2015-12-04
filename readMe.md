@@ -26,10 +26,10 @@
      >For Example :-
      
      
-     `adminEmail` model can only send email to `employee` model.
+           `adminEmail` model can only send email to `employee` model.
      
      
-     `offers` email model can send email to `customers` who wants to know about offers and so on.
+           `offers` email model can send email to `customers` who wants to know about offers and so on.
   * `template` contains an object with property name of the template type name and value having template link.
   * Using template you can send any user templated form of the email. like 
   
