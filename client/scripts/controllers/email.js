@@ -68,9 +68,19 @@ angular.module($snaphy.getModuleName())
                 console.log("Error fetching data from the server");
             });
 
+            var showError = function(msg){
+                SnaphyTemplate.notify({
+                    message: msg,
+                    type: 'danger',
+                    icon: 'fa fa-times',
+                    align: 'right'
+                });
+            };
+
 
             //sendMail() function to send mail..
-            $scope.sendMail = function(sendMethodName){
+            $scope.sendMail = function(sendMethodName, subject){
+                console.log($scope.getHtmlData());
                 if($scope.users){
                     if($scope.users.length){
                         //Now check if values has been checked or not..
@@ -83,20 +93,52 @@ angular.module($snaphy.getModuleName())
                             }
                         });
 
-                        if(selectedUsers.length === 0 ){
-                            SnaphyTemplate.notify({
-                                message: "You must select atleast one user before sending them email.",
-                                type: 'danger',
-                                icon: 'fa fa-times',
-                                align: 'right'
-                            });
+
+                        try{
+                            if(sendMethodName === null && $scope.getHtmlData().trim().length === 0){
+                                showError("You must type atleast some message before sending mail");
+                                return null;
+                            }
+                        }
+                        catch(err){
+                            showError("You must type atleast some message before sending mail");
                             return null;
+                        }
+
+
+                        try{
+                            if(subject.length === 0){
+                                showError("Write some subject before sending mail.");
+                                return null;
+                            }
+                        }
+                        catch(err){
+                            showError("Write some subject before sending mail.");
+                            return null;
+                        }
+
+
+                        try{
+                            if(selectedUsers.length === 0 ){
+                                showError("You must select atleast one user before sending them email.");
+                                return null;
+                            }
+                        }
+                        catch(err){
+                            showError("You must select atleast one user before sending them email.");
+                            return null;
+                        }
+
+                        if(sendMethodName){
+                            //TODO ADD CUSTOM SEND MAIl..
+                            //
+                            //
                         }else{
                             //Now send mail to the users..
-                            emailModel[sendMethodName]({}, {
+                            emailModel.sendMail({}, {
                                 "to": selectedUsers,
-                                "subject":"this is a static subject",
-                                "templateOptions":{title: "ttt", subject: 'sdasd'}
+                                "subject": subject,
+                                "html": $scope.getHtmlData()
                             },
                             function(values){
                                 //email send successfully..
@@ -110,7 +152,8 @@ angular.module($snaphy.getModuleName())
                                 console.error(httpResponse);
                                 console.error("Error sending email.");
                             });
-                        }//else
+                        }
+
                     }
                 }
             };

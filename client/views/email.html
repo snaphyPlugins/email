@@ -9,6 +9,14 @@
                 <div  class="block-content">
                     <form action="page_forms_editors.html" method="post" class="form-horizontal" onsubmit="return false;">
                         <div class="form-group">
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="form-material floating">
+                                    <input class="form-control" ng-model="staticSubject" type="text" id="material-text2" name="material-text2">
+                                    <label for="material-text2">Subject</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <div class="col-xs-12">
                                 <!-- CKEditor Container -->
                                 <textarea snaphy-ck-editor id="js-ckeditor" name="ckeditor"></textarea>
@@ -16,7 +24,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-12">
-                                <button ng-click="sendMail('sendNotice')" class="btn btn-minw btn-primary pull-right" type="button">Send Mail</button>
+                                <button ng-click="sendMail(null, staticSubject)" class="btn btn-minw btn-primary pull-right" type="button">Send Mail</button>
                             </div>
                         </div>
                     </form>
