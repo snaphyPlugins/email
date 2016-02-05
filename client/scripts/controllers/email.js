@@ -79,7 +79,7 @@ angular.module($snaphy.getModuleName())
 
 
             //sendMail() function to send mail..
-            $scope.sendMail = function(sendMethodName, subject){
+            $scope.sendMail = function(sendMethodName, subject, templateValues){
                 console.log($scope.getHtmlData());
                 if($scope.users){
                     if($scope.users.length){
@@ -130,9 +130,24 @@ angular.module($snaphy.getModuleName())
                         }
 
                         if(sendMethodName){
-                            //TODO ADD CUSTOM SEND MAIl..
-                            //
-                            //
+                            //Now send mail to the users..
+                            emailModel[sendMethodName]({}, {
+                                "to": selectedUsers,
+                                "subject": subject,
+                                "templateOptions": templateValues
+                            },
+                            function(values){
+                                //email send successfully..
+                                SnaphyTemplate.notify({
+                                    message: "Email send successfully.",
+                                    type: 'success',
+                                    icon: 'fa fa-times',
+                                    align: 'right'
+                                });
+                            }, function(httpResponse){
+                                console.error(httpResponse);
+                                console.error("Error sending email.");
+                            });
                         }else{
                             //Now send mail to the users..
                             emailModel.sendMail({}, {
@@ -175,6 +190,7 @@ angular.module($snaphy.getModuleName())
                 //Now call the getschema method..
                 emailModel.getMailSchema({}, {}, function(value){
                     console.log(value);
+                    $scope.mailSchema = value.schema;
                 }, function(httpResponse){
                     //error
                     console.error("Error fetching mail schema from server.");
@@ -189,6 +205,7 @@ angular.module($snaphy.getModuleName())
 
         //Only run init if state is not undefined.
         if($state.current.name){
+            $scope.schema = {};
             //Now call the init method...
             init();
         }else{

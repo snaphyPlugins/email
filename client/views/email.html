@@ -7,10 +7,10 @@
                     <h3 class="block-title">Send Custom Email</h3>
                 </div>
                 <div  class="block-content">
-                    <form action="page_forms_editors.html" method="post" class="form-horizontal" onsubmit="return false;">
+                    <form  class="form-horizontal" onsubmit="return false;">
                         <div class="form-group">
                             <div class="col-sm-12 col-xs-12">
-                                <div class="form-material floating">
+                                <div class="form-material">
                                     <input class="form-control" ng-model="staticSubject" type="text" id="material-text2" name="material-text2">
                                     <label for="material-text2">Subject</label>
                                 </div>
@@ -34,28 +34,28 @@
             <!-- END CKEditor -->
 
 
-            <div  class="block">
+            <div class="block" ng-repeat="(methodName, value) in mailSchema.templates">
                 <div class="block-header">
-                    <h3 class="block-title">Email Editor</h3>
+                    <h3 class="block-title">{{value.label}}</h3>
                 </div>
-                <div  class="block-content">
-                    <form action="page_forms_editors.html" method="post" class="form-horizontal" onsubmit="return false;">
+                <div  class="block-content block-content-full">
+                    <form class="form-horizontal" name="formInfo" ng-validate="schema.validations" novalidate >
                         <div class="form-group">
-                            <div class="col-xs-12">
-
-                                <form name="formInfo" ng-validate="schema.validations" novalidate  class="form-horizontal">
-                                    <formly-form   model="mailData" fields="schema.fields">
-                                    </formly-form>
-                                </form>
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="form-material">
+                                    <input class="form-control" ng-model="value.mailValue.staticSubject" type="text" id="material-text2" name="material-text2">
+                                    <label for="material-text2">Subject</label>
+                                </div>
                             </div>
                         </div>
+                        <formly-form   model="value.mailValue" fields="value.properties">
+                        </formly-form>
                         <div class="form-group">
                             <div class="col-md-12">
-                                <button ng-click="sendMail()" class="btn btn-minw btn-primary pull-right" type="button">Send Mail</button>
+                                <button ng-click="sendMail(methodName, value.mailValue.staticSubject, value.mailValue)" class="btn btn-minw btn-primary pull-right" type="button">Send Mail</button>
                             </div>
                         </div>
                     </form>
-                    <!-- <button ng-click="getHtmlData()"></button> -->
                 </div>
             </div>
             <!-- END CKEditor -->

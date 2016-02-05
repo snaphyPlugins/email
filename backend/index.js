@@ -43,7 +43,6 @@ module.exports = function(server, databaseObj, helper, packageObj) {
                 description: "Remote method for sending mail from the frontend."
             }
         );
-
 	};
 
 
