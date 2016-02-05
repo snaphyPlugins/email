@@ -80,7 +80,7 @@ angular.module($snaphy.getModuleName())
 
             //sendMail() function to send mail..
             $scope.sendMail = function(sendMethodName, subject, templateValues){
-                console.log($scope.getHtmlData());
+
                 if($scope.users){
                     if($scope.users.length){
                         //Now check if values has been checked or not..
@@ -129,46 +129,60 @@ angular.module($snaphy.getModuleName())
                             return null;
                         }
 
-                        if(sendMethodName){
-                            //Now send mail to the users..
-                            emailModel[sendMethodName]({}, {
-                                "to": selectedUsers,
-                                "subject": subject,
-                                "templateOptions": templateValues
+                        $scope.dialog = {
+                            message: "Do you want to send mail?",
+                            title: "Confirm mail send",
+                            onCancel: function() {
+                                /*Do nothing..*/
+                                //Reset the disloag bar..
+                                $scope.dialog.show = false;
                             },
-                            function(values){
-                                //email send successfully..
-                                SnaphyTemplate.notify({
-                                    message: "Email send successfully.",
-                                    type: 'success',
-                                    icon: 'fa fa-times',
-                                    align: 'right'
-                                });
-                            }, function(httpResponse){
-                                console.error(httpResponse);
-                                console.error("Error sending email.");
-                            });
-                        }else{
-                            //Now send mail to the users..
-                            emailModel.sendMail({}, {
-                                "to": selectedUsers,
-                                "subject": subject,
-                                "html": $scope.getHtmlData()
+                            onConfirm: function() {
+                                //Reset the dialog bar..
+                                $scope.dialog.show = false;
+                                //Now send the mail..
+                                if(sendMethodName){
+                                    //Now send mail to the users..
+                                    emailModel[sendMethodName]({}, {
+                                        "to": selectedUsers,
+                                        "subject": subject,
+                                        "templateOptions": templateValues
+                                    },
+                                    function(values){
+                                        //email send successfully..
+                                        SnaphyTemplate.notify({
+                                            message: "Email send successfully.",
+                                            type: 'success',
+                                            icon: 'fa fa-times',
+                                            align: 'right'
+                                        });
+                                    }, function(httpResponse){
+                                        console.error(httpResponse);
+                                        console.error("Error sending email.");
+                                    });
+                                }else{
+                                    //Now send mail to the users..
+                                    emailModel.sendMail({}, {
+                                        "to": selectedUsers,
+                                        "subject": subject,
+                                        "html": $scope.getHtmlData()
+                                    },
+                                    function(values){
+                                        //email send successfully..
+                                        SnaphyTemplate.notify({
+                                            message: "Email send successfully.",
+                                            type: 'success',
+                                            icon: 'fa fa-times',
+                                            align: 'right'
+                                        });
+                                    }, function(httpResponse){
+                                        console.error(httpResponse);
+                                        console.error("Error sending email.");
+                                    });
+                                }
                             },
-                            function(values){
-                                //email send successfully..
-                                SnaphyTemplate.notify({
-                                    message: "Email send successfully.",
-                                    type: 'success',
-                                    icon: 'fa fa-times',
-                                    align: 'right'
-                                });
-                            }, function(httpResponse){
-                                console.error(httpResponse);
-                                console.error("Error sending email.");
-                            });
-                        }
-
+                            show: true
+                        };
                     }
                 }
             };
