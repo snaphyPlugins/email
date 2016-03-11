@@ -1,6 +1,6 @@
 (function() {
     'use strict';
-})()
+})();
 
 module.exports = function(server, databaseObj, helper, packageObj) {
     var fs = require('fs');
@@ -10,24 +10,26 @@ module.exports = function(server, databaseObj, helper, packageObj) {
 
 
 	//Add remote method for the custom mail template entered..
-	var addMailTemplateRemoteMethod = function(mailModel, methodName, mailInstance, from){
+	var addMailTemplateRemoteMethod = function(mailModel, methodName, mailInstance){
 		mailInstance[methodName] = function(to, subject, templateOptions, callback){
+            //console.log(to, subject);
 			//add from method here..
 			//Change from to be provided from the user interface..
 			//var from = "'Rohit Basu' <rohitbasu2050@gmail.com>";
 			//Call the mail defined method..
-			mailModel[methodName](from, to, subject, templateOptions, function(err, send){
+			mailModel[methodName](to, subject, templateOptions, function(err, send){
 
 				if (err) {
 					console.error(err);
 					return false;
 				}
+
 				console.log(send);
 				//Dont wait for callback..
-				////We dont need to do anything in calse email sending fails..
+				////We dont need to do anything in case email sending fails..
 			});
 			callback(null, "Successfully send email.");
-		}
+		};
 
 		//Now registering the method `getSchema`
         mailInstance.remoteMethod(
@@ -68,6 +70,7 @@ module.exports = function(server, databaseObj, helper, packageObj) {
             callback(null, "Successfully send email.");
 
         };
+
 
 		//Now registering the method `getSchema`
         mailModel.remoteMethod(
@@ -152,16 +155,15 @@ module.exports = function(server, databaseObj, helper, packageObj) {
                              * @param templateOptions {} object of the template data EJS
                              * @param callback function(err, success) callback.
                              */
-                            var compileAndSend = function(from, to, subject, templateOptions, callback) {
+                            var compileAndSend = function(to, subject, templateOptions, callback) {
                                 //First compile the template and get its string html form..
                                 //Now send the email..
                                 var templateString = null;
                                 templateString = fs.readFileSync(templatePath, 'utf-8');
-
                                 var htmlBody = ejs.render(templateString, templateOptions);
                                 //Now send the mail..with send function..
                                 send({
-                                    from: from,
+                                    from: mailConfig.from,
                                     to: to,
                                     subject: subject,
                                     html: htmlBody
@@ -170,7 +172,7 @@ module.exports = function(server, databaseObj, helper, packageObj) {
                                         return callback(err);
                                     }
                                     callback(null, success);
-                                })
+                                });
                             };
                             //Now return the function..
                             return compileAndSend;
@@ -204,7 +206,6 @@ module.exports = function(server, databaseObj, helper, packageObj) {
 		 * @param callback
 		 */
 		modelObj.getMailSchema = function(callback) {
-
 			callback(null, modelConfigData);
 		};
 
@@ -218,7 +219,6 @@ module.exports = function(server, databaseObj, helper, packageObj) {
 				description: "Send the mail schema of the to the browser."
 			}
 		);
-
 	};
 
 
@@ -231,7 +231,6 @@ module.exports = function(server, databaseObj, helper, packageObj) {
 		mailModel.forEach(function(modelConfigData){
 			addRestMethod(modelConfigData);
 		});
-
     };
 
 

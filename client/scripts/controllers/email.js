@@ -208,7 +208,7 @@ angular.module($snaphy.getModuleName())
                         user.selected = false;
                     });
                 }
-            }
+            };
 
             //Checkbox onclick box method..
             $scope.toggleChecked = function(user){
@@ -236,11 +236,13 @@ angular.module($snaphy.getModuleName())
 
             //Now fetch the schema
             fetchEmailSchema();
-        }//init method..
+        };//init method..
 
+        var stateName = $state.current.name;
+        var patt = /\_\_/;
 
         //Only run init if state is not undefined.
-        if($state.current.name){
+        if(patt.test(stateName)){
             $scope.schema = {};
             $scope.selectAll = false;
             //Now call the init method...
@@ -254,9 +256,9 @@ angular.module($snaphy.getModuleName())
                 //send state name in form of.. home({foo: true, bar: 1})
                 var obj = {
                     emailModel: emailModel
-                }
+                };
                 return emailModel + "__" + userModel + '('+  JSON.stringify(obj) + ')';
-            }
+            };
         }
 
 
